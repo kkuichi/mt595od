@@ -1,66 +1,61 @@
-# AI Tutor pre Moodle
+# block_aitutor – AI Tutor pre Moodle
 
-Tento projekt je vlastný Moodle blok (plugin), ktorý som vytvorila ako súčasť bakalárskej práce.  
-Cieľom bolo pridať do Moodle jednoduchého AI tutora, ktorý vie odpovedať na otázky študenta na základe materiálov v kurze.
+Vlastný blok plugin pre Moodle vytvorený ako súčasť bakalárskej práce 
+na TUKE FEI KKUI. Plugin umožňuje študentom klásť otázky k PDF 
+materiálom kurzu a dostávať odpovede generované AI modelom 
+na základe princípu RAG (Retrieval-Augmented Generation).
 
-## Vytvorenie prostredia
+## Systémové požiadavky
 
-Moodle bol nainštalovaný na Linux serveri (Ubuntu).  
-Pri inštalácii som najprv skúšala klonovanie z Git repozitára, ale finálne som použila oficiálny balík Moodle (verzia 5.1), ktorý som stiahla a rozbalila.
-
-Následne som:
-- nastavila webový server (Apache)
-- vytvorila databázu v MariaDB
-- nastavila priečinok moodledata
-- nakonfigurovala prístupové práva
-
-Po základnej inštalácii som Moodle upravovala priamo na serveri a pridávala vlastný plugin.
-
-## Ako to funguje
-
-Blok sa zobrazí v kurze a študent môže napísať otázku.  
-Plugin následne prejde PDF materiály v kurze, vytiahne z nich text a vyberie relevantné časti podľa otázky.
-
-Tieto časti sa pošlú spolu s otázkou do AI modelu, ktorý vygeneruje odpoveď.  
-Výsledok sa zobrazí priamo v bloku bez reloadu stránky.
-
-## Hlavné časti riešenia
-
-- načítanie PDF súborov z kurzu
-- extrakcia textu pomocou nástroja pdftotext
-- rozdelenie textu na menšie časti (chunks)
-- jednoduché skórovanie relevantnosti podľa otázky
-- výber najrelevantnejších častí (RAG prístup)
-- volanie AI modelu (Groq alebo Gemini)
-- zobrazenie odpovede v Moodle bloku pomocou AJAX
-
-## Štruktúra pluginu
-
-- `block_aitutor.php` – hlavná časť bloku a používateľské rozhranie
-- `ajax.php` – spracovanie otázky na serveri
-- `lib.php` – logika práce s PDF a komunikácia s AI
-- `version.php` – informácie o plugine
-- `db/access.php` – definícia práv
-- `lang/en/block_aitutor.php` – jazykové reťazce
-
-## Použité technológie
-
-- PHP (Moodle API)
-- JavaScript (fetch, AJAX)
-- AI API (Groq, Gemini)
-- pdftotext
+- Moodle 5.x
+- PHP 8.1+
+- Linux server (Ubuntu)
+- pdftotext (`sudo apt install poppler-utils`)
+- Prístup k Gemini API alebo Groq API
 
 ## Inštalácia
 
-1. Skopírovať priečinok `aitutor` do:
-   `moodle/blocks/`
-2. Prihlásiť sa do Moodle ako admin
-3. Spustiť aktualizáciu databázy (Site administration → Notifications)
-4. Pridať blok do kurzu
+1. Skopírovať priečinok `aitutor` do `moodle/blocks/`
+2. Prihlásiť sa do Moodle ako administrátor
+3. Prejsť do Site administration → Notifications a spustiť aktualizáciu databázy
+4. Pridať blok do kurzu cez režim úprav
 
-## Poznámky
+## Konfigurácia AI
 
-Plugin bol vytvorený pre Moodle verziu 5.x.  
-Minimálna požadovaná verzia je definovaná v súbore version.php (2024042200).
+Vytvoriť súbor `/var/www/moodle/secure/openai_config.php` 
+mimo webového adresára s nasledujúcou štruktúrou:
 
-AI konfigurácia (API kľúče) je uložená mimo webového adresára v priečinku `/secure` kvôli bezpečnosti.
+```php
+<?php
+return [
+    'primary' => [
+        'provider' => 'gemini',
+        'apikey'   => 'VAS_API_KLUC',
+        'model'    => 'gemini-1.5-flash',
+    ],
+    'fallback' => [
+        'provider' => 'groq',
+        'apikey'   => 'VAS_API_KLUC',
+        'model'    => 'llama3-8b-8192',
+    ],
+];
+```
+
+## Štruktúra pluginu
+
+| Súbor | Popis |
+|-------|-------|
+| `block_aitutor.php` | Hlavná trieda bloku, HTML rozhranie, JavaScript |
+| `ajax.php` | Príjem AJAX požiadaviek, overenie session, orchestrácia |
+| `lib.php` | Extrakcia PDF, RAG algoritmus, volanie AI API |
+| `version.php` | Verzia a metadáta pluginu |
+| `db/access.php` | Definícia prístupových práv |
+| `lang/en/block_aitutor.php` | Jazykové reťazce |
+
+## Kľúčové parametre RAG algoritmu
+
+- Veľkosť chunku: 1 400 znakov
+- Prekrytie chunkov: 250 znakov
+- Maximálny počet chunkov v kontexte: 12
+- Maximálny počet znakov kontextu: 24 000
+- Temperature modelu: 0,3
