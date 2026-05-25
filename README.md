@@ -1,4 +1,4 @@
-# block_aitutor – AI Tutor pre Moodle
+# AI Tutor pre Moodle - block_aitutor 
 
 Vlastný blok plugin pre Moodle vytvorený ako súčasť bakalárskej práce 
 na TUKE FEI KKUI. Plugin umožňuje študentom klásť otázky k PDF 
