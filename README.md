@@ -1,7 +1,7 @@
 # AI Tutor pre Moodle - block_aitutor 
 
-Vlastný blok plugin pre Moodle vytvorený ako súčasť bakalárskej práce 
-na TUKE FEI KKUI. Plugin umožňuje študentom klásť otázky k PDF 
+Vlastný blok plugin pre Moodle vytvorený ako súčasť bakalárskej práce. 
+Plugin umožňuje študentom klásť otázky k PDF 
 materiálom kurzu a dostávať odpovede generované AI modelom 
 na základe princípu RAG (Retrieval-Augmented Generation).
 
