@@ -1,6 +1,6 @@
 # AI Tutor pre Moodle
 
-Tento projekt je vlastný Moodle blok, ktorý som vytvorila ako súčasť práce.  
+Tento projekt je vlastný Moodle blok (plugin), ktorý som vytvorila ako súčasť bakalárskej práce.  
 Cieľom bolo pridať do Moodle jednoduchého AI tutora, ktorý vie odpovedať na otázky študenta na základe materiálov v kurze.
 
 ## Vytvorenie prostredia
