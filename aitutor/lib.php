@@ -260,7 +260,7 @@ function block_aitutor_get_course_pdf_context(int $courseid, int $maxchars = 240
     $usedfiles = [];
     $usedchunks = [];
 
-    // 1. Najprv zober najlepší relevantný chunk z každého PDF.
+    // Najprv zober najlepší relevantný chunk z každého PDF.
     $bestperfile = [];
     foreach ($allchunks as $item) {
         $filename = $item['filename'];
@@ -285,7 +285,7 @@ function block_aitutor_get_course_pdf_context(int $courseid, int $maxchars = 240
         $usedchunks[$uniqueid] = true;
     }
 
-    // 2. Potom doplň ďalšie najlepšie chunky bez duplicít.
+    // Doplň ďalšie najlepšie chunky bez duplicít.
     foreach ($allchunks as $item) {
         $part = "[Súbor: {$item['filename']}]\n{$item['text']}\n\n";
         $partlen = core_text::strlen($part);
